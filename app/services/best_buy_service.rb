@@ -6,7 +6,6 @@ class BestBuyService
   end
 
   def get_products(keyword)
-    parse("search=#{keyword}?show=name,sku,salePrice,customerReviewAverage,shortDescription,image&format=json&apiKey=#{ENV["BEST_BUY_KEY"]}")
   end
 
   private
