@@ -3,6 +3,8 @@ RSpec.describe "items", :type => :request do
     Item.create(name: "Gorgeous Iron Bottle",
     description: "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
     image_url: "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200")
+    Item.create(name: "cool item", description: "cool", image_url: "cool link")
+    Item.create(name: "coolest item", description: "cool", image_url: "cool link")
 
     get '/api/v1/items'
 
@@ -10,14 +12,43 @@ RSpec.describe "items", :type => :request do
 
     json_body = JSON.parse(response.body)
 
+    expect(json_body.count).to eq 3
+
     expect(json_body[0]).to eq ({
       "name" => "Gorgeous Iron Bottle",
       "description" => "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
       "image_url" => "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200"
     })
   end
-end
 
-# When I send a GET request to `/api/v1/items`
-# I receive a 200 JSON response containing all items
-# And each item has a name, description, and image_url but not the created_at or updated_at
+  it "shows a single item and its info" do
+    Item.create(name: "Gorgeous Iron Bottle",
+    description: "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+    image_url: "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200")
+
+    get '/api/v1/items/1'
+
+    expect(response.status).to eq 200
+
+    json_body = JSON.parse(response.body)
+
+    expect(json_body).to eq ({
+      "name" => "Gorgeous Iron Bottle",
+      "description" => "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+      "image_url" => "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200"
+    })
+  end
+
+  it "deletes an item" do
+    Item.create(name: "Gorgeous Iron Bottle",
+    description: "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+    image_url: "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200")
+
+    expect(Item.count).to eq 1
+
+    delete '/api/v1/items/1'
+
+    expect(response.status).to eq 204
+    expect(Item.count).to eq 0
+  end
+end
