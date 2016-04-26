@@ -1,6 +1,10 @@
-RSpec.describe "it returns all the items" do
+RSpec.describe "items", :type => :request do
   it "shows a list of items and their attributes " do
-    get "/api/v1/items"
+    Item.create(name: "Gorgeous Iron Bottle",
+    description: "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+    image_url: "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200")
+
+    get '/api/v1/items'
 
     expect(response.status).to eq 200
 
