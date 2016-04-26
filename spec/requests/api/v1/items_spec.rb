@@ -51,4 +51,22 @@ RSpec.describe "items", :type => :request do
     expect(response.status).to eq 204
     expect(Item.count).to eq 0
   end
+
+  it "creates an item" do
+    item_params = {name: "Gorgeous Iron Bottle",
+    description: "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+    image_url: "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200"}
+
+    post '/api/v1/items', item: item_params
+
+    expect(response.status).to eq 201
+
+    json_body = JSON.parse(response.body)
+
+    expect(json_body).to eq ({
+      "name" => "Gorgeous Iron Bottle",
+      "description" => "Quo animi vel non ea assumenda. Reprehenderit a perspiciatis numquam. Repellendus quia sit rerum.",
+      "image_url" => "http://robohash.org/0.png?set=set2&bgset=bg1&size=200x200"
+    })
+  end
 end
