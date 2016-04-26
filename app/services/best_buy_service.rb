@@ -7,7 +7,7 @@ class BestBuyService
     url = "https://api.bestbuy.com/v1/products(longDescription=#{keyword}*)?show=sku,name,customerReviewAverage,shortDescription,salePrice,image&apiKey=#{ENV["BEST_BUY_KEY"]}&format=json"
     uri = URI.parse(URI.encode(url.strip))
     response = Net::HTTP.get(uri)
-    parse(response)
+    parse(response)["products"]
   end
 
   private
