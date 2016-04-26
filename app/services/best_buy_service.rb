@@ -1,17 +1,18 @@
+require 'net/http'
+
 class BestBuyService
   attr_reader :connection
 
-  def initialize
-    uri = URI.parse(URI.encode(url.strip))
-    @connection = Faraday.new("https://api.bestbuy.com/v1/products")
-  end
-
   def get_products(keyword)
+    url = "https://api.bestbuy.com/v1/products(longDescription=#{keyword}*)?show=sku,name,customerReviewAverage,shortDescription,salePrice,image&apiKey=#{ENV["BEST_BUY_KEY"]}&format=json"
+    uri = URI.parse(URI.encode(url.strip))
+    response = Net::HTTP.get(uri)
+    parse(response)
   end
 
   private
 
-  def parse(path)
-    JSON.parse(connection.get(path).body)
+  def parse(response)
+    JSON.parse(response)
   end
 end
